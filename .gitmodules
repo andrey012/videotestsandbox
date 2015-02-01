@@ -1,0 +1,6 @@
+[submodule "yii"]
+	path = yii
+	url = https://github.com/yiisoft/yii.git
+[submodule "protected/vendor/videotest"]
+	path = protected/vendor/videotest
+	url = https://github.com/andrey012/videotest.git
