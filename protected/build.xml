@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<!-- This is a comment -->
+
+<project name="hr_analytic" default="test">
+    <property name="src_dir" value="./" override="false"/>
+    <property name="www_dir" value="../" override="false"/>
+
+    <target name="clean">
+        <delete includeemptydirs="true">
+            <fileset dir="${www_dir}/assets/">
+                <include name="**"/>
+                <exclude name=".gitignore"/>
+            </fileset>
+            <fileset dir="${src_dir}/runtime/">
+                <include name="**"/>
+                <exclude name=".gitignore"/>
+            </fileset>
+        </delete>
+    </target>
+
+    <target name="test">
+        <adhoc-task name="yiiautoloader">
+            <![CDATA[
+                class YiiBootstrapper extends Task{
+                    public function main(){
+                        spl_autoload_register(array('YiiBase','autoload'));
+                    }
+                }
+            ]]>
+        </adhoc-task>
+
+        <phpunit bootstrap="${src_dir}/tests/bootstrap.php" failureproperty="phpunitFailure" errorproperty="phpunitError" incompleteproperty="phpunitIncomplete" skippedproperty="phpunitSkipped">
+            <batchtest>
+                <fileset dir="${src_dir}/tests">
+                    <include name="**/*Test.php"/>
+                </fileset>
+            </batchtest>
+            <formatter type="plain" usefile="false" />
+            <formatter type="xml" outfile="runtime/phpunit-result.xml"/>
+        </phpunit>
+        <delete dir="runtime/phpunit-result" quiet="true"/>
+        <mkdir dir="runtime/phpunit-result"/>
+        <phpunitreport infile="runtime/phpunit-result.xml" todir="runtime/phpunit-result"/>
+        <yiiautoloader/>
+        <fail if="phpunitFailure">phpunitFailure</fail>
+        <fail if="phpunitError">phpunitError</fail>
+        <fail if="phpunitIncomplete">phpunitIncomplete</fail>
+        <fail if="phpunitSkipped">phpunitSkipped</fail>
+    </target>
+
+
+
+    <target name="ci">
+        <exec command="whoami" outputProperty="whoami"/>
+        <if>
+            <equals arg1="${whoami}" arg2="jenkins"/>
+            <then/>
+            <else>
+                <fail message="This target designed for CI server, but whoami returned ${whoami}"/>
+            </else>
+        </if>
+        <chmod file="${project.basedir}/runtime" mode="0777" />
+        <chmod file="${project.basedir}/../assets" mode="0777" />
+        <echo file="${project.basedir}/runtime/application.log"></echo>
+        <chmod file="${project.basedir}/runtime/application.log" mode="0777" />
+        <echo file="${project.basedir}/${src_dir}/config/local.php"><![CDATA[<?php
+			return array(
+				'params'=>array(
+					'phpunit'=>array(
+						'selenium'=>array(
+							'url'=>'http://localhost/cc/videotestsandbox/',
+						),
+					),
+                    'selenium-video'=>array(
+                        'fast'=>false,
+                        'ignore-fast-override'=>true,
+                    ),
+				),
+			);			
+            ?>]]>
+        </echo>
+        <phingcall target="clean"/>
+        <phingcall target="test"/>
+    </target>
+
+</project>

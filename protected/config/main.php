@@ -5,7 +5,7 @@
 
 // This is the main Web application configuration. Any writable
 // CWebApplication properties can be configured here.
-return array(
+$main = array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
 	'name'=>'My Web Application',
 
@@ -89,3 +89,9 @@ return array(
 		),
 	),
 );
+if (file_exists($localConfig = dirname(__FILE__).'/local.php')) {
+    return CMap::mergeArray($main, include($localConfig));
+} else {
+    return $main;
+}
+
