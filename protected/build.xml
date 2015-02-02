@@ -64,19 +64,17 @@
         <echo file="${project.basedir}/runtime/application.log"></echo>
         <chmod file="${project.basedir}/runtime/application.log" mode="0777" />
         <echo file="${project.basedir}/${src_dir}/config/local.php"><![CDATA[<?php
-			return array(
-				'params'=>array(
-					'phpunit'=>array(
-						'selenium'=>array(
-							'url'=>'http://localhost/cc/videotestsandbox/',
-						),
-					),
+            return array(
+                'params'=>array(
+                    'selenium'=>array(
+                        'url'=>'http://localhost/cc/videotest/',
+                    ),
                     'selenium-video'=>array(
                         'fast'=>false,
                         'ignore-fast-override'=>true,
                     ),
-				),
-			);			
+                ),
+            );			
             ?>]]>
         </echo>
         <phingcall target="clean"/>
@@ -84,3 +82,4 @@
     </target>
 
 </project>
+
