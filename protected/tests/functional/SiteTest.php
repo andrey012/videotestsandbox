@@ -23,31 +23,36 @@ class SiteTest extends WebTestCase
         $this->open('?r=site/mouseclick');
         $this->videoStart(__FUNCTION__);
         $this->videoShowMessage('function videoMouseClick($element, $nearTheLeftSide=false, $highlightCallback=false)'."\n".'used to animate a mouse pointer (arrow) approaching particular element to simulate a click. By default random position inside the $element is choosen as mouse destination:');
-        $this->videoMouseClick('xpath=//button[@id="b1"]');
-        $this->videoMouseClick('xpath=//button[@id="b2"]');
-        $this->videoMouseClick('xpath=//button[@id="b3"]');
+        $this
+            ->videoMouseClick('xpath=//button[@id="b1"]')
+            ->videoMouseClick('xpath=//button[@id="b2"]')
+            ->videoMouseClick('xpath=//button[@id="b3"]');
         $this->videoShowMessage('this is not too useful when an element has 100% width, while has only small text at its left, like these <p>\'s:');
-        $this->videoMouseClick('xpath=//p[@id="p1"]');
-        $this->videoMouseClick('xpath=//p[@id="p2"]');
-        $this->videoMouseClick('xpath=//p[@id="p3"]');
+        $this
+            ->videoMouseClick('xpath=//p[@id="p1"]')
+            ->videoMouseClick('xpath=//p[@id="p2"]')
+            ->videoMouseClick('xpath=//p[@id="p3"]');
         $this->videoShowMessage('to fix this $nearTheLeftSide parameter can be set to true:');
-        $this->videoMouseClick('xpath=//p[@id="p1"]', true);
-        $this->videoMouseClick('xpath=//p[@id="p2"]', true);
-        $this->videoMouseClick($q = 'xpath=//p[@id="p3"]', true);
-        
+        $this
+            ->videoMouseClick('xpath=//p[@id="p1"]', true)
+            ->videoMouseClick('xpath=//p[@id="p2"]', true)
+            ->videoMouseClick($q = 'xpath=//p[@id="p3"]', true);
+
         $this->videoShowMessage('alternatively $nearTheLeftSide can be array(top, left) absolute exact coordinates (relative to the page, not the window)');
-        $this->videoMouseClick($q, array(100, 100));
-        $this->videoMouseClick($q, array(200, 200));
-        $this->videoMouseClick($q, array(300, 300));
-        
+        $this
+            ->videoMouseClick($q, array(100, 100))
+            ->videoMouseClick($q, array(200, 200))
+            ->videoMouseClick($q, array(300, 300));
+
         $this->videoShowMessage('or an array of two strings in format array(\'+20\', \'-5\') to tweak mouse destination position. This can be useful for the cases, when Selenium can not detect element position on page correctly and we need to introduce a shift. For example: here is if we try to use it with $nearTheLeftSide = array(\'+20\', \'-5\'):');
-        $this->videoMouseClick('xpath=//button[@id="b1"]', array('+20', '-5'));
-        $this->videoMouseClick('xpath=//button[@id="b2"]', array('+20', '-5'));
-        $this->videoMouseClick('xpath=//button[@id="b3"]', array('+20', '-5'));
+        $this
+            ->videoMouseClick('xpath=//button[@id="b1"]', array('+20', '-5'))
+            ->videoMouseClick('xpath=//button[@id="b2"]', array('+20', '-5'))
+            ->videoMouseClick('xpath=//button[@id="b3"]', array('+20', '-5'));
         $this->videoShowMessage('at the end videoMouseClick calls mouseOver() for the desired element, but since this does not always work - you can specify your own callback at $highlightCallback parameter');        
     }
 
-    
+
     public function test003VideoType(){
         $this->videoInit();
         $this->open('?r=site/contact');
@@ -55,21 +60,22 @@ class SiteTest extends WebTestCase
         $this->videoShowMessage('function videoType($element, $text)'."\n".'animates Selenium type() function by typing letters one by one, like this:');
         $this->videoType($q='xpath=//input[@name="ContactForm[name]"]', $t='My name is Bob');
         $this->videoSleep(3000);
-        $this->videoShowMessage('it is recommended to use videoMouseClick() and focus() for better user experience:');
-        $this->type($q, '');
-        $this->focus('xpath=//input[@name="ContactForm[email]"]');
-        $this->videoMouseClick($q);
-        $this->focus($q);
-        $this->videoType($q, $t);
-        $this->videoMouseClick($q='id=ContactForm_email');
-        $this->focus($q);
-        $this->videoType($q, 'demo@example.com');
-        $this->videoMouseClick($q='id=ContactForm_subject');
-        $this->focus($q);
-        $this->videoType($q, 'Hello World!');
-        $this->videoMouseClick($q='id=ContactForm_body');
-        $this->focus($q);
-        $this->videoType($q, 'Here is my message');
+        $this
+            ->videoShowMessage('it is recommended to use videoMouseClick() and focus() for better user experience:')
+            ->type($q, '')
+            ->focus('xpath=//input[@name="ContactForm[email]"]')
+            ->videoMouseClick($q)
+            ->focus($q)
+            ->videoType($q, $t)
+            ->videoMouseClick($q='id=ContactForm_email')
+            ->focus($q)
+            ->videoType($q, 'demo@example.com')
+            ->videoMouseClick($q='id=ContactForm_subject')
+            ->focus($q)
+            ->videoType($q, 'Hello World!')
+            ->videoMouseClick($q='id=ContactForm_body')
+            ->focus($q)
+            ->videoType($q, 'Here is my message');
 
         $this->videoSleep(2000);
     }
@@ -100,17 +106,19 @@ class SiteTest extends WebTestCase
         $this->videoSetVisible('xpath=//p[@id="p300"]');
         $this->videoSleep(2000);
     }
-    
+
     public function test006VideoCustomSelectBoxSelect(){
         $this->videoInit();
         $this->open('?r=site/customselectbox');
         $this->videoStart(__FUNCTION__);
-        $this->videoShowMessage('function videoCustomSelectBoxSelect($id, $value)'."\n".'used to gracefully show selecting value from drop-down list drawn with selectBox jQuery plugin.'."\n".'$id is select\'s id.'."\n".'$value is option\'s value:');
-        $this->videoCustomSelectBoxSelect('selectbox', 1);
-        $this->videoCustomSelectBoxSelect('selectbox', 2);
-        $this->videoCustomSelectBoxSelect('selectbox', 1);
+        $this
+            ->videoShowMessage('function videoCustomSelectBoxSelect($id, $value)'."\n".'used to gracefully show selecting value from drop-down list drawn with selectBox jQuery plugin.'."\n".'$id is select\'s id.'."\n".'$value is option\'s value:')
+            ->videoCustomSelectBoxSelect('selectbox', 1)
+            ->videoCustomSelectBoxSelect('selectbox', 2)
+            ->videoCustomSelectBoxSelect('selectbox', 1);
+        $this->videoSleep(2000);
     }
-    
+
     public function test007VideoHideDatePicker(){
         $this->videoInit();
         $this->open('?r=site/datepicker');
