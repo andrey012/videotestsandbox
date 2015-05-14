@@ -60,22 +60,21 @@ class SiteTest extends WebTestCase
         $this->videoShowMessage('function videoType($element, $text)'."\n".'animates Selenium type() function by typing letters one by one, like this:');
         $this->videoType($q='xpath=//input[@name="ContactForm[name]"]', $t='My name is Bob');
         $this->videoSleep(3000);
-        $this
-            ->videoShowMessage('it is recommended to use videoMouseClick() and focus() for better user experience:')
-            ->type($q, '')
-            ->focus('xpath=//input[@name="ContactForm[email]"]')
-            ->videoMouseClick($q)
-            ->focus($q)
-            ->videoType($q, $t)
-            ->videoMouseClick($q='id=ContactForm_email')
-            ->focus($q)
-            ->videoType($q, 'demo@example.com')
-            ->videoMouseClick($q='id=ContactForm_subject')
-            ->focus($q)
-            ->videoType($q, 'Hello World!')
-            ->videoMouseClick($q='id=ContactForm_body')
-            ->focus($q)
-            ->videoType($q, 'Here is my message');
+        $this->videoShowMessage('it is recommended to use videoMouseClick() and focus() for better user experience:');
+        $this->type($q, '');
+        $this->focus('xpath=//input[@name="ContactForm[email]"]');
+        $this->videoMouseClick($q);
+        $this->focus($q);
+        $this->videoType($q, $t);
+        $this->videoMouseClick($q='id=ContactForm_email');
+        $this->focus($q);
+        $this->videoType($q, 'demo@example.com');
+        $this->videoMouseClick($q='id=ContactForm_subject');
+        $this->focus($q);
+        $this->videoType($q, 'Hello World!');
+        $this->videoMouseClick($q='id=ContactForm_body');
+        $this->focus($q);
+        $this->videoType($q, 'Here is my message');
 
         $this->videoSleep(2000);
     }
